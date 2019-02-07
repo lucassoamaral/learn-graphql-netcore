@@ -12,6 +12,9 @@ namespace ProductBacklog.Api.GraphQL.Types
             Field(x => x.Description);
             Field(x => x.RepositoryUrl);
             Field(x => x.ProjectUrl);
+            Field<ProjectTypeEnumType>("Type");
+            Field<ProjectType>("ParentProject");
+            Field<ListGraphType<ProjectType>>("Subprojects");
         }
     }
 }
