@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GraphQL;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using ProductBacklog.Api.Data.Repository;
+using ProductBacklog.Api.GraphQL;
+using ProductBacklog.Api.Model;
 
 namespace ProductBacklog.Api
 {
@@ -24,7 +24,16 @@ namespace ProductBacklog.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSingleton<IRepository<Project>, ProjectRepository>();
+
+            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+            services.AddScoped<ProductBacklogSchema>();
+
+            services.AddGraphQL(x => { x.ExposeExceptions = true; })
+                .AddGraphTypes(ServiceLifetime.Scoped);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,7 +44,8 @@ namespace ProductBacklog.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseGraphQL<ProductBacklogSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
         }
     }
 }

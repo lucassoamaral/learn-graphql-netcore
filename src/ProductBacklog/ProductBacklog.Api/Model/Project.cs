@@ -2,7 +2,7 @@
 
 namespace ProductBacklog.Api.Model
 {
-    public class Project
+    public class Project : IApiModel
     {
         public int Id { get; set; }
 
