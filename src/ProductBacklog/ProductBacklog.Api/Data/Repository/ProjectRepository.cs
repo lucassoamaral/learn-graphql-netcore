@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ProductBacklog.Api.Model;
 
 namespace ProductBacklog.Api.Data.Repository
@@ -15,6 +16,7 @@ namespace ProductBacklog.Api.Data.Repository
                     Title = "Test 2",
                     Description = "Test  2",
                     Type = Enums.ProjectType.Customer,
+                    CreatedAt = DateTimeOffset.Now.AddDays(-5),
                     ParentProject = new Project
                     {
                         Id = 1,
