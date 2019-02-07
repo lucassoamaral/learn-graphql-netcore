@@ -1,11 +1,12 @@
 ﻿using GraphQL.Types;
+using ProductBacklog.Api.Data.Repository;
 using ProductBacklog.Api.Model;
 
 namespace ProductBacklog.Api.GraphQL.Types
 {
     public class ProjectType : ObjectGraphType<Project>
     {
-        public ProjectType()
+        public ProjectType(IRequirementRepository requirementRepository)
         {
             Field(x => x.Id);
             Field(x => x.Title);
@@ -16,6 +17,10 @@ namespace ProductBacklog.Api.GraphQL.Types
             Field<ProjectTypeEnumType>(nameof(Project.Type));
             Field<ProjectType>(nameof(Project.ParentProject));
             Field<ListGraphType<ProjectType>>(nameof(Project.Subprojects));
+
+            Field<ListGraphType<RequirementType>>(
+                nameof(Project.Requirements),
+                resolve: context => requirementRepository.GetForProject(context.Source.Id));
         }
     }
 }

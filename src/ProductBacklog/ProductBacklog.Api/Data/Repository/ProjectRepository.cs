@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ProductBacklog.Api.Model;
 
 namespace ProductBacklog.Api.Data.Repository
 {
-    public class ProjectRepository : IRepository<Project>
+    public class ProjectRepository : IProjectRepository
     {
-        public IEnumerable<Project> GetAll()
-        {
-            return new List<Project>
+        private readonly IEnumerable<Project> _data = new List<Project>
             {
                 new Project
                 {
@@ -34,6 +33,15 @@ namespace ProductBacklog.Api.Data.Repository
                     }
                 }
             };
+
+        public IEnumerable<Project> GetAll()
+        {
+            return _data;
+        }
+
+        public Project GetById(int id)
+        {
+            return _data.SingleOrDefault(x => x.Id == id);
         }
     }
 }

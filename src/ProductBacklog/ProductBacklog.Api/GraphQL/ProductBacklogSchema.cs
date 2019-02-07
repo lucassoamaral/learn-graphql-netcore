@@ -9,7 +9,7 @@ namespace ProductBacklog.Api.GraphQL
         public ProductBacklogSchema(IDependencyResolver resolver)
             : base(resolver)
         {
-            Query = resolver.Resolve<ProjectsQuery>();
+            Query = resolver.Resolve<ProductBacklogQuery>();
         }
     }
 }

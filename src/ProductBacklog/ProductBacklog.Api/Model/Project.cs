@@ -23,5 +23,7 @@ namespace ProductBacklog.Api.Model
         public Project ParentProject { get; set; }
 
         public IEnumerable<Project> Subprojects { get; set; }
+
+        public IEnumerable<Requirement> Requirements { get; set; }
     }
 }

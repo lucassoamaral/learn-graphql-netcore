@@ -7,5 +7,7 @@ namespace ProductBacklog.Api.Data.Repository
         where TModel : IApiModel
     {
         IEnumerable<TModel> GetAll();
+
+        TModel GetById(int id);
     }
 }
