@@ -1,42 +1,30 @@
-﻿using ProductBacklog.Api.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductBacklog.Api.Data.Context;
+using ProductBacklog.Api.GraphQL.Extensions;
+using ProductBacklog.Api.GraphQL.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ProductBacklog.Api.Data.Repository
 {
     public class RequirementRepository : IRequirementRepository
     {
-        private readonly IEnumerable<Requirement> _data = new List<Requirement>
-        {
-            new Requirement
-            {
-                Id = 1,
-                ShortDescription = "A short requirement 1",
-                DetailedDescription = "With some details 1",
-                ProjectId = 1
-            },
-            new Requirement
-            {
-                Id = 2,
-                ShortDescription = "A short requirement 2",
-                DetailedDescription = "With some details 2",
-                ProjectId = 2
-            }
-        };
+        private readonly ProductBacklogContext _context;
 
-        public IEnumerable<Requirement> GetAll()
+        public RequirementRepository(ProductBacklogContext context)
         {
-            return _data;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public IEnumerable<Requirement> GetForProject(int projectId)
-        {
-            return _data.Where(x => x.ProjectId == projectId);
-        }
+        public async Task<IEnumerable<RequirementModel>>GetAll() =>
+            await _context.Requirements.Select(x => x.ToApiModel()).ToListAsync();
 
-        public Requirement GetById(int id)
-        {
-            return _data.SingleOrDefault(x => x.Id == id);
-        }
+        public async Task<IEnumerable<RequirementModel>> GetForProject(int projectId) =>
+            await _context.Requirements.Where(x => x.ProjectId == projectId).Select(x => x.ToApiModel()).ToListAsync();
+
+        public async Task<RequirementModel> GetById(int id) =>
+            await _context.Requirements.Where(x => x.Id == id).Select(x => x.ToApiModel()).SingleOrDefaultAsync();
     }
 }

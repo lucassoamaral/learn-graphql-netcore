@@ -4,11 +4,12 @@ using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProductBacklog.Api.Data.Context;
 using ProductBacklog.Api.Data.Repository;
 using ProductBacklog.Api.GraphQL;
-using ProductBacklog.Api.Model;
 
 namespace ProductBacklog.Api
 {
@@ -26,6 +27,9 @@ namespace ProductBacklog.Api
         {
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            services.AddDbContext<ProductBacklogContext>
+                (options => options.UseSqlServer(@"Data Source=localhost;Initial Catalog=ProductBacklog;Integrated Security=True"), ServiceLifetime.Singleton);
 
             services.AddSingleton<IProjectRepository, ProjectRepository>();
             services.AddSingleton<IRequirementRepository, RequirementRepository>();

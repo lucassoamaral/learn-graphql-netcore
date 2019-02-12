@@ -1,6 +1,6 @@
-﻿namespace ProductBacklog.Api.Model
+﻿namespace ProductBacklog.Api.Data.Entity.Type
 {
-    public class Requirement : IApiModel
+    public class Requirement : IEntity
     {
         public int Id { get; set; }
 

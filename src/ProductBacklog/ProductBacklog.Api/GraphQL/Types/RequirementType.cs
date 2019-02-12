@@ -1,10 +1,10 @@
 ﻿using GraphQL.Types;
 using ProductBacklog.Api.Data.Repository;
-using ProductBacklog.Api.Model;
+using ProductBacklog.Api.GraphQL.Model;
 
 namespace ProductBacklog.Api.GraphQL.Types
 {
-    public class RequirementType : ObjectGraphType<Requirement>
+    public class RequirementType : ObjectGraphType<RequirementModel>
     {
         public RequirementType(IProjectRepository projectRepository)
         {
@@ -13,7 +13,7 @@ namespace ProductBacklog.Api.GraphQL.Types
             Field(x => x.DetailedDescription);
 
             Field<ProjectType>(
-                nameof(Requirement.Project),
+                nameof(RequirementModel.Project),
                 resolve: context => projectRepository.GetById(context.Source.ProjectId));
         }
     }

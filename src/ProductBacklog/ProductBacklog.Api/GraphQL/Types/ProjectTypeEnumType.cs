@@ -1,5 +1,5 @@
 ﻿using GraphQL.Types;
-using ProductBacklog.Api.Model;
+using ProductBacklog.Api.GraphQL.Model;
 
 namespace ProductBacklog.Api.GraphQL.Types
 {

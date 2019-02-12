@@ -1,4 +1,4 @@
-﻿namespace ProductBacklog.Api.Model
+﻿namespace ProductBacklog.Api.GraphQL.Model
 {
     public class Enums
     {

@@ -1,47 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProductBacklog.Api.Model;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using ProductBacklog.Api.Data.Context;
+using ProductBacklog.Api.GraphQL.Extensions;
+using ProductBacklog.Api.GraphQL.Model;
+
 
 namespace ProductBacklog.Api.Data.Repository
 {
     public class ProjectRepository : IProjectRepository
     {
-        private readonly IEnumerable<Project> _data = new List<Project>
-            {
-                new Project
-                {
-                    Id = 2,
-                    Title = "Test 2",
-                    Description = "Test  2",
-                    Type = Enums.ProjectType.Customer,
-                    CreatedAt = DateTimeOffset.Now.AddDays(-5),
-                    ParentProject = new Project
-                    {
-                        Id = 1,
-                        Title = "Test 1",
-                        Description = "Test 1"
-                    },
-                    Subprojects = new List<Project>
-                    {
-                        new Project
-                        {
-                            Id = 3,
-                            Title = "Test 3",
-                            Description = "Test 3"
-                        }
-                    }
-                }
-            };
+        private readonly ProductBacklogContext _context;
 
-        public IEnumerable<Project> GetAll()
+        public ProjectRepository(ProductBacklogContext context)
         {
-            return _data;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public Project GetById(int id)
-        {
-            return _data.SingleOrDefault(x => x.Id == id);
-        }
+        public async Task<IEnumerable<ProjectModel>> GetAll() =>
+            await _context.Projects
+                .Select(x => x.ToApiModel())
+                .ToListAsync();
+
+        public async Task<ProjectModel> GetById(int id) =>
+            await _context.Projects.Select(x => x.ToApiModel()).SingleOrDefaultAsync(x => x.Id == id);
+
+        public async Task<IEnumerable<ProjectModel>> GetSubprojects(int projectId) =>
+            await _context.Projects.Where(x => x.ParentProjectId == projectId).Select(x => x.ToApiModel()).ToListAsync();
     }
 }

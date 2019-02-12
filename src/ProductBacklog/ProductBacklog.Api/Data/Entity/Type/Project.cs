@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using static ProductBacklog.Api.Model.Enums;
+using static ProductBacklog.Api.GraphQL.Model.Enums;
 
-namespace ProductBacklog.Api.Model
+namespace ProductBacklog.Api.Data.Entity.Type
 {
-    public class Project : IApiModel
+    public class Project : IEntity
     {
         public int Id { get; set; }
 
@@ -20,10 +20,12 @@ namespace ProductBacklog.Api.Model
 
         public DateTimeOffset CreatedAt { get; set; }
 
+        public int? ParentProjectId { get; set; }
+
         public Project ParentProject { get; set; }
 
-        public IEnumerable<Project> Subprojects { get; set; }
+        public ICollection<Project> Subprojects { get; set; }
 
-        public IEnumerable<Requirement> Requirements { get; set; }
+        public ICollection<Requirement> Requirements { get; set; }
     }
 }

@@ -1,10 +1,11 @@
-﻿using ProductBacklog.Api.Model;
+﻿using ProductBacklog.Api.GraphQL.Model;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProductBacklog.Api.Data.Repository
 {
-    public interface IRequirementRepository : IRepository<Requirement>
+    public interface IRequirementRepository : IRepository<RequirementModel>
     {
-        IEnumerable<Requirement> GetForProject(int projectId);
+        Task<IEnumerable<RequirementModel>> GetForProject(int projectId);
     }
 }
