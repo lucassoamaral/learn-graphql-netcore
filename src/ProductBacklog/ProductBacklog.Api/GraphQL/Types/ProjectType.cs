@@ -1,4 +1,5 @@
-﻿using GraphQL.Types;
+﻿using GraphQL.DataLoader;
+using GraphQL.Types;
 using ProductBacklog.Api.Data.Repository;
 using ProductBacklog.Api.GraphQL.Model;
 
@@ -6,7 +7,10 @@ namespace ProductBacklog.Api.GraphQL.Types
 {
     public class ProjectType : ObjectGraphType<ProjectModel>
     {
-        public ProjectType(IRequirementRepository requirementRepository, IProjectRepository projectRepository)
+        public ProjectType(
+            IDataLoaderContextAccessor dataLoaderAccessor,
+            IRequirementRepository requirementRepository, 
+            IProjectRepository projectRepository)
         {
             Field(x => x.Id);
             Field(x => x.Title);
@@ -26,7 +30,13 @@ namespace ProductBacklog.Api.GraphQL.Types
 
             Field<ListGraphType<RequirementType>>(
                 nameof(ProjectModel.Requirements),
-                resolve: context => requirementRepository.GetForProject(context.Source.Id));
+                resolve: context =>
+                {
+                    var loader = dataLoaderAccessor.Context.GetOrAddCollectionBatchLoader<int, RequirementModel>(
+                        "GetRequirementsByProjectId", requirementRepository.GetForProjects);
+
+                    return loader.LoadAsync(context.Source.Id);
+                });
         }
     }
 }

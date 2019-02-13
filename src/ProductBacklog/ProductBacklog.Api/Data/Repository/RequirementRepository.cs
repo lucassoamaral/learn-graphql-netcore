@@ -21,8 +21,12 @@ namespace ProductBacklog.Api.Data.Repository
         public async Task<IEnumerable<RequirementModel>>GetAll() =>
             await _context.Requirements.Select(x => x.ToApiModel()).ToListAsync();
 
-        public async Task<IEnumerable<RequirementModel>> GetForProject(int projectId) =>
-            await _context.Requirements.Where(x => x.ProjectId == projectId).Select(x => x.ToApiModel()).ToListAsync();
+        public async Task<ILookup<int, RequirementModel>> GetForProjects(IEnumerable<int> projectIds) =>
+            (await _context.Requirements
+                .Where(x => projectIds.Contains(x.ProjectId))
+                .Select(x => x.ToApiModel())
+                .ToListAsync())
+                .ToLookup(x => x.ProjectId);
 
         public async Task<RequirementModel> GetById(int id) =>
             await _context.Requirements.Where(x => x.Id == id).Select(x => x.ToApiModel()).SingleOrDefaultAsync();

@@ -38,7 +38,8 @@ namespace ProductBacklog.Api
             services.AddScoped<ProductBacklogSchema>();
 
             services.AddGraphQL(x => { x.ExposeExceptions = true; })
-                .AddGraphTypes(ServiceLifetime.Scoped);
+                .AddGraphTypes(ServiceLifetime.Scoped)
+                .AddDataLoader();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
