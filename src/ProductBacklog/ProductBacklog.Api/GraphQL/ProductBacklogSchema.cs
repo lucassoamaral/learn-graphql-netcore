@@ -11,6 +11,7 @@ namespace ProductBacklog.Api.GraphQL
         {
             Query = resolver.Resolve<ProductBacklogQuery>();
             Mutation = resolver.Resolve<ProductBacklogMutation>();
+            Subscription = resolver.Resolve<ProjectSubscription>();
         }
     }
 }

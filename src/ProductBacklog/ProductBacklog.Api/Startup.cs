@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ProductBacklog.Api.Data.Context;
 using ProductBacklog.Api.Data.Repository;
 using ProductBacklog.Api.GraphQL;
+using ProductBacklog.Api.GraphQL.Messaging;
 
 namespace ProductBacklog.Api
 {
@@ -36,10 +37,12 @@ namespace ProductBacklog.Api
 
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
             services.AddScoped<ProductBacklogSchema>();
+            services.AddSingleton<ProjectMessageService>();
 
             services.AddGraphQL(x => { x.ExposeExceptions = true; })
                 .AddGraphTypes(ServiceLifetime.Scoped)
-                .AddDataLoader();
+                .AddDataLoader()
+                .AddWebSockets();
 
             services.AddCors();
         }
@@ -53,7 +56,10 @@ namespace ProductBacklog.Api
             }
 
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            
+
+            app.UseWebSockets();
+            app.UseGraphQLWebSockets<ProductBacklogSchema>("/graphql");
+
             app.UseGraphQL<ProductBacklogSchema>();
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
         }
