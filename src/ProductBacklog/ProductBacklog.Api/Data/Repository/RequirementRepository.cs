@@ -30,5 +30,10 @@ namespace ProductBacklog.Api.Data.Repository
 
         public async Task<RequirementModel> GetById(int id) =>
             await _context.Requirements.Where(x => x.Id == id).Select(x => x.ToApiModel()).SingleOrDefaultAsync();
+
+        public Task<RequirementModel> Add(RequirementModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

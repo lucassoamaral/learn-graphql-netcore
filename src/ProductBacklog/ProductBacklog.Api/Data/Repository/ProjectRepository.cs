@@ -19,6 +19,14 @@ namespace ProductBacklog.Api.Data.Repository
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public async Task<ProjectModel> Add(ProjectModel apiModel)
+        {
+            _context.Projects.Add(apiModel.ToDbModel());
+            await _context.SaveChangesAsync();
+
+            return apiModel;
+        }
+
         public async Task<IEnumerable<ProjectModel>> GetAll() =>
             await _context.Projects
                 .Select(x => x.ToApiModel())

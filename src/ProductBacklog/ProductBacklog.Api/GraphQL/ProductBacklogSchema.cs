@@ -10,6 +10,7 @@ namespace ProductBacklog.Api.GraphQL
             : base(resolver)
         {
             Query = resolver.Resolve<ProductBacklogQuery>();
+            Mutation = resolver.Resolve<ProductBacklogMutation>();
         }
     }
 }

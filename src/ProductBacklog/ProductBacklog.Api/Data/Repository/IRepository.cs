@@ -10,5 +10,7 @@ namespace ProductBacklog.Api.Data.Repository
         Task<IEnumerable<TModel>> GetAll();
 
         Task<TModel> GetById(int id);
+
+        Task<TModel> Add(TModel model);
     }
 }

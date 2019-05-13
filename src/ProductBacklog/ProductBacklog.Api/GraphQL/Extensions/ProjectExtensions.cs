@@ -17,5 +17,18 @@ namespace ProductBacklog.Api.GraphQL.Extensions
                 Type = entity.Type,
                 ParentProjectId = entity.ParentProjectId
             };
+
+        public static Project ToDbModel(this ProjectModel apiModel) =>
+            new Project
+            {
+                Id = apiModel.Id,
+                Title = apiModel.Title,
+                Description = apiModel.Description,
+                RepositoryUrl = apiModel.RepositoryUrl,
+                ProjectUrl = apiModel.ProjectUrl,
+                CreatedAt = apiModel.CreatedAt,
+                Type = apiModel.Type,
+                ParentProjectId = apiModel.ParentProjectId
+            };
     }
 }
